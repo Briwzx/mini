@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Panel de Tareas</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Mis Tareas</h2>
+      <input type="text" id="title" placeholder="Título" />
+      <textarea id="description" placeholder="Descripción"></textarea>
+      <input type="date" id="startDate" />
+      <input type="date" id="endDate" />
+      <button onclick="createTask()">Agregar Tarea</button>
+      <div id="tasks"></div>
+      <div class="stats">
+        <h3>Estadísticas</h3>
+        <p id="stats"></p>
+      </div>
+    </div>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>
