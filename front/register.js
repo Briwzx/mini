@@ -16,7 +16,6 @@ async function register() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         firstName: name,
-        lastName: "-",
         email,
         password,
       }),
