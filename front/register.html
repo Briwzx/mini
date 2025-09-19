@@ -3,16 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <title>Registro</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="container">
-      <h2>Crear cuenta</h2>
-      <input type="text" id="name" placeholder="Nombre completo" />
-      <input type="email" id="email" placeholder="Correo electrónico" />
-      <input type="password" id="password" placeholder="Contraseña" />
-      <button onclick="register()">Registrarse</button>
+      <h1>Registro</h1>
+      <form onsubmit="event.preventDefault(); register();">
+        <input type="text" id="name" placeholder="Nombre completo" required />
+        <input type="email" id="email" placeholder="Correo" required />
+        <input
+          type="password"
+          id="password"
+          placeholder="Contraseña"
+          required
+        />
+        <button type="submit">Registrarme</button>
+      </form>
+
+      <div class="extra">
+        <p>¿Ya tienes cuenta?</p>
+        <a href="login.html" class="btn-secondary">Inicia sesión</a>
+      </div>
     </div>
-    <script src="js/register.js"></script>
+
+    <script src="registro.js"></script>
   </body>
 </html>

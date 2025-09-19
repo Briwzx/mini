@@ -1,26 +1,35 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const dotenv = require("dotenv");
-
-dotenv.config();
+require("dotenv").config();
 
 const app = express();
-app.use(express.json());
+
+// ✅ Middlewares
 app.use(cors());
+app.use(express.json());
 
-const authRoutes = require("./routes/authRoutes");
-const taskRoutes = require("./routes/taskRoutes");
-
+// ✅ Rutas
+const authRoutes = require("./authRoutes");
 app.use("/api/auth", authRoutes);
-app.use("/api/tasks", taskRoutes);
+
+// Si tienes rutas de tareas, descomenta esto:
+// const taskRoutes = require("./taskRoutes");
+// app.use("/api/tasks", taskRoutes);
+
+// ✅ Conexión a MongoDB
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/todoapp";
 
 mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("MongoDB conectado");
-    app.listen(process.env.PORT, () =>
-      console.log(`Servidor en puerto ${process.env.PORT}`)
-    );
-  })
-  .catch((err) => console.error(err));
+  .connect(MONGO_URI)
+  .then(() => console.log("✅ Conectado a MongoDB"))
+  .catch((err) => {
+    console.error("❌ Error al conectar MongoDB:", err.message);
+    process.exit(1); // Si falla, cerramos el server
+  });
+
+// ✅ Servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+});

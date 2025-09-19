@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mis Tareas</title>
+    <link rel="stylesheet" href="style.css?v=1" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Mis Tareas</h1>
+
+      <!-- Formulario nueva tarea -->
+      <form onsubmit="event.preventDefault(); addTask();">
+        <input
+          type="text"
+          id="title"
+          placeholder="Título de la tarea"
+          required
+        />
+        <textarea id="description" placeholder="Descripción"></textarea>
+        <label>Inicio: <input type="date" id="startDate" required /></label>
+        <label>Fin: <input type="date" id="endDate" required /></label>
+        <button type="submit">Agregar Tarea</button>
+      </form>
+
+      <h2>Estadísticas</h2>
+      <p id="stats"></p>
+
+      <h2>Lista de Tareas</h2>
+      <ul id="taskList"></ul>
+
+      <button onclick="logout()" class="btn-secondary">Cerrar Sesión</button>
+    </div>
+
+    <script src="tareas.js"></script>
+  </body>
+</html>
