@@ -26,7 +26,7 @@ async function register() {
 
     if (res.ok) {
       alert("✅ Registro exitoso, ahora inicia sesión");
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     } else {
       alert("⚠️ " + (data.message || "Error al registrarse"));
     }
