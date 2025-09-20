@@ -9,7 +9,8 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:3000", // frontend en local
   "http://localhost:5000", // backend local
-  "https://mini-gamma-murex.vercel.app", // 👈 tu frontend en Vercel
+  "https://mini-gamma-murex.vercel.app", // otro frontend en Vercel (si lo usas)
+  "https://mini11.vercel.app", // 👈 tu frontend actual en Vercel
 ];
 
 app.use(
@@ -22,9 +23,14 @@ app.use(
         return callback(new Error("CORS no permitido para " + origin), false);
       }
     },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // 👈 Métodos permitidos
+    allowedHeaders: ["Content-Type", "Authorization"], // 👈 Headers permitidos
     credentials: true,
   })
 );
+
+// ✅ Habilitar preflight global
+app.options("*", cors());
 
 app.use(express.json());
 
