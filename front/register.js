@@ -11,11 +11,11 @@ async function register() {
   }
 
   try {
-    const res = await fetch(`${API_URL}./auth/register`, {
+    const res = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        firstName: name,
+        name,
         email,
         password,
       }),
@@ -27,7 +27,7 @@ async function register() {
       alert("✅ Registro exitoso, ahora inicia sesión");
       window.location.href = "index.html";
     } else {
-      alert("⚠️ " + (data.message || "Error al registrarse"));
+      alert("⚠️ " + (data.message || data.error || "Error al registrarse"));
     }
   } catch (err) {
     alert("❌ Error al conectar con el servidor");

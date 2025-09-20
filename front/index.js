@@ -19,7 +19,7 @@ async function login() {
     const data = await res.json();
 
     if (res.ok) {
-      alert("✅ Inicio de sesión exitoso. Bienvenido/a " + data.user.firstName);
+      alert("✅ Inicio de sesión exitoso. Bienvenido/a " + data.user.name);
       // Guardamos token en localStorage para futuras peticiones
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));

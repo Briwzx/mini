@@ -3,33 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <title>Mis Tareas</title>
-    <link rel="stylesheet" href="style.css?v=1" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="container">
       <h1>Mis Tareas</h1>
 
-      <!-- Formulario nueva tarea -->
-      <form onsubmit="event.preventDefault(); addTask();">
+      <form onsubmit="event.preventDefault(); addTask();" class="task-form">
         <input
           type="text"
           id="title"
           placeholder="Título de la tarea"
           required
         />
-        <textarea id="description" placeholder="Descripción"></textarea>
-        <label>Inicio: <input type="date" id="startDate" required /></label>
-        <label>Fin: <input type="date" id="endDate" required /></label>
-        <button type="submit">Agregar Tarea</button>
+        <textarea
+          id="description"
+          placeholder="Descripción de la tarea"
+        ></textarea>
+        <div class="date-group">
+          <label>Inicio: <input type="date" id="startDate" required /></label>
+          <label>Fin: <input type="date" id="endDate" required /></label>
+        </div>
+        <button type="submit" class="btn-primary">➕ Agregar Tarea</button>
       </form>
 
-      <h2>Estadísticas</h2>
+      <h2>📊 Estadísticas</h2>
       <p id="stats"></p>
 
-      <h2>Lista de Tareas</h2>
-      <ul id="taskList"></ul>
+      <h2>📋 Lista de Tareas</h2>
+      <ul id="taskList" class="task-list"></ul>
 
-      <button onclick="logout()" class="btn-secondary">Cerrar Sesión</button>
+      <button onclick="logout()" class="btn-secondary">🚪 Cerrar Sesión</button>
     </div>
 
     <script src="tareas.js"></script>

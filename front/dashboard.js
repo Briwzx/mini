@@ -2,10 +2,24 @@ const API_URL = "http://localhost:5000/api";
 const token = localStorage.getItem("token");
 
 async function createTask() {
-  const title = document.getElementById("title").value;
-  const description = document.getElementById("description").value;
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
   const startDate = document.getElementById("startDate").value;
   const endDate = document.getElementById("endDate").value;
+
+  if (!title || !startDate || !endDate) {
+    alert("⚠️ Debes completar al menos título y fechas.");
+    return;
+  }
+
+  const taskData = {
+    title,
+    description,
+    startDate: new Date(startDate).toISOString(),
+    endDate: new Date(endDate).toISOString(),
+  };
+
+  console.log("📤 Enviando tarea al backend (dashboard):", taskData);
 
   const res = await fetch(`${API_URL}/tasks`, {
     method: "POST",
@@ -13,11 +27,21 @@ async function createTask() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ title, description, startDate, endDate }),
+    body: JSON.stringify(taskData),
   });
 
-  await res.json();
-  loadTasks();
+  if (res.ok) {
+    alert("✅ Tarea agregada con éxito");
+    document.getElementById("title").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("startDate").value = "";
+    document.getElementById("endDate").value = "";
+    loadTasks();
+  } else {
+    const err = await res.json();
+    console.error("❌ Error al agregar tarea:", err);
+    alert("❌ Error al agregar tarea: " + (err.error || err.message));
+  }
 }
 
 async function loadTasks() {
@@ -34,9 +58,11 @@ async function loadTasks() {
     const div = document.createElement("div");
     div.className = "task" + (t.completed ? " completed" : "");
     div.innerHTML = `
-      <span>${t.title} (${t.startDate.split("T")[0]} → ${
-      t.endDate.split("T")[0]
-    })</span>
+      <span>${t.title} (${new Date(
+      t.startDate
+    ).toLocaleDateString()} → ${new Date(
+      t.endDate
+    ).toLocaleDateString()})</span>
       <button onclick="toggleTask('${t._id}', ${t.completed})">${
       t.completed ? "Desmarcar" : "Completar"
     }</button>

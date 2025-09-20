@@ -3,7 +3,6 @@ const router = express.Router();
 const Task = require("./Task");
 const jwt = require("jsonwebtoken");
 
-// Middleware para validar token
 function authMiddleware(req, res, next) {
   const token = req.headers["authorization"];
   if (!token) return res.status(401).json({ message: "Acceso denegado" });
@@ -17,7 +16,6 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// 📌 Crear tarea
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const { title, description, startDate, endDate } = req.body;
@@ -35,7 +33,6 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
-// 📌 Obtener todas las tareas del usuario
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const tasks = await Task.find({ userId: req.user.id });
@@ -45,7 +42,6 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-// 📌 Actualizar tarea
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const task = await Task.findOneAndUpdate(
@@ -60,7 +56,6 @@ router.put("/:id", authMiddleware, async (req, res) => {
   }
 });
 
-// 📌 Eliminar tarea
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     const task = await Task.findOneAndDelete({

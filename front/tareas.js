@@ -7,12 +7,22 @@ if (!token) {
 }
 
 async function fetchTasks() {
-  const res = await fetch(`${API_URL}/tasks`, {
-    headers: { Authorization: token },
-  });
-  const tasks = await res.json();
-  renderTasks(tasks);
-  updateStats(tasks);
+  try {
+    const res = await fetch(`${API_URL}/tasks`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) {
+      throw new Error("Error al obtener tareas");
+    }
+
+    const tasks = await res.json();
+    renderTasks(tasks);
+    updateStats(tasks);
+  } catch (err) {
+    console.error("❌ Error en fetchTasks:", err.message);
+    alert("❌ No se pudieron cargar las tareas.");
+  }
 }
 
 async function addTask() {
@@ -21,20 +31,34 @@ async function addTask() {
   const startDate = document.getElementById("startDate").value;
   const endDate = document.getElementById("endDate").value;
 
+  if (!title || !startDate || !endDate) {
+    alert("⚠️ Debes completar al menos título y fechas.");
+    return;
+  }
+
+  const taskData = {
+    title,
+    description,
+    startDate: new Date(startDate).toISOString(),
+    endDate: new Date(endDate).toISOString(),
+  };
+
   const res = await fetch(`${API_URL}/tasks`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ title, description, startDate, endDate }),
+    body: JSON.stringify(taskData),
   });
 
   if (res.ok) {
     document.querySelector("form").reset();
     fetchTasks();
+    alert("✅ Tarea agregada con éxito");
   } else {
-    alert("❌ Error al agregar tarea");
+    const err = await res.json();
+    alert("❌ Error al agregar tarea: " + (err.error || err.message));
   }
 }
 
@@ -43,18 +67,56 @@ async function toggleTask(id, completed) {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ completed: !completed }),
   });
   fetchTasks();
 }
 
+async function editTask(id, currentDescription, currentStart, currentEnd) {
+  const newDescription = prompt("✏️ Edita la descripción:", currentDescription);
+  if (newDescription === null) return; // cancelar edición
+
+  const newStart = prompt(
+    "📅 Nueva fecha de inicio (YYYY-MM-DD):",
+    currentStart.split("T")[0]
+  );
+  if (newStart === null) return;
+
+  const newEnd = prompt(
+    "📅 Nueva fecha de fin (YYYY-MM-DD):",
+    currentEnd.split("T")[0]
+  );
+  if (newEnd === null) return;
+
+  const res = await fetch(`${API_URL}/tasks/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      description: newDescription,
+      startDate: new Date(newStart).toISOString(),
+      endDate: new Date(newEnd).toISOString(),
+    }),
+  });
+
+  if (res.ok) {
+    alert("✅ Tarea actualizada");
+    fetchTasks();
+  } else {
+    const err = await res.json();
+    alert("❌ Error al actualizar tarea: " + (err.error || err.message));
+  }
+}
+
 async function deleteTask(id) {
   if (!confirm("¿Seguro que deseas eliminar esta tarea?")) return;
   await fetch(`${API_URL}/tasks/${id}`, {
     method: "DELETE",
-    headers: { Authorization: token },
+    headers: { Authorization: `Bearer ${token}` },
   });
   fetchTasks();
 }
@@ -73,6 +135,9 @@ function renderTasks(tasks) {
       <button onclick="toggleTask('${t._id}', ${t.completed})">
         ${t.completed ? "✅ Completada" : "⬜ Pendiente"}
       </button>
+      <button onclick="editTask('${t._id}', '${t.description || ""}', '${
+      t.startDate
+    }', '${t.endDate}')">✏️ Editar</button>
       <button onclick="deleteTask('${t._id}')">🗑️ Eliminar</button>
     `;
     list.appendChild(li);
@@ -94,5 +159,4 @@ function logout() {
   window.location.href = "login.html";
 }
 
-// Inicializar
 fetchTasks();
