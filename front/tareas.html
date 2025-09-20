@@ -9,6 +9,10 @@
     <div class="container">
       <h1>Mis Tareas</h1>
 
+      <div style="margin-bottom: 20px">
+        <p>Tiempo en la aplicación: <span id="time-counter">0s</span></p>
+      </div>
+
       <form onsubmit="event.preventDefault(); addTask();" class="task-form">
         <input
           type="text"
@@ -34,6 +38,23 @@
       <ul id="taskList" class="task-list"></ul>
 
       <button onclick="logout()" class="btn-secondary">🚪 Cerrar Sesión</button>
+    </div>
+
+    <div id="profile-bar" onclick="toggleProfilePanel()">👤 Mi Perfil</div>
+
+    <div id="profile-panel">
+      <div style="text-align: center; margin-bottom: 10px">
+        <img
+          id="profile-avatar"
+          src="https://i.pravatar.cc/80"
+          alt="Avatar"
+          style="border-radius: 50%; width: 80px; height: 80px"
+        />
+      </div>
+      <label>Nombre: <input type="text" id="profile-name" /></label>
+      <label>Email: <input type="email" id="profile-email" /></label>
+      <p id="profile-stats"></p>
+      <button onclick="updateProfile()">💾 Guardar Perfil</button>
     </div>
 
     <script src="tareas.js"></script>

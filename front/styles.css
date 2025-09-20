@@ -5,7 +5,7 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   padding: 2rem;
   color: #333;
 }
@@ -14,16 +14,15 @@ body {
   background: #fff;
   padding: 2rem;
   border-radius: 14px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 700px;
+  max-width: 500px;
   animation: fadeIn 0.8s ease-in-out;
 }
 
-/* Títulos */
 h1, h2 {
   text-align: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1rem;
   color: #2c3e50;
   font-weight: 600;
 }
@@ -31,19 +30,19 @@ h1, h2 {
 form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 2rem;
+  gap: 14px;
+  margin-bottom: 1.5rem;
 }
 
 form input,
 form textarea,
 form select {
   width: 100%;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 14px;
+  border-radius: 10px;
   border: 1px solid #dcdde1;
   font-size: 15px;
-  transition: all 0.2s;
+  transition: all 0.2s ease-in-out;
 }
 
 form input:focus,
@@ -51,25 +50,18 @@ form textarea:focus,
 form select:focus {
   border-color: #4e73df;
   outline: none;
-  box-shadow: 0 0 6px rgba(78, 115, 223, 0.6);
+  box-shadow: 0 0 8px rgba(78, 115, 223, 0.5);
 }
 
 textarea {
   resize: vertical;
-  min-height: 80px;
-}
-
-/* Agrupación de fechas */
-.date-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
+  min-height: 100px;
 }
 
 button, .btn {
   padding: 12px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
@@ -111,33 +103,19 @@ button, .btn {
 
 .task-list li {
   background: #f9f9f9;
-  margin: 8px 0;
-  padding: 14px;
-  border-radius: 10px;
+  margin: 10px 0;
+  padding: 16px;
+  border-radius: 12px;
   border-left: 6px solid #4e73df;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: transform 0.2s, background 0.2s;
+  flex-direction: column;
+  transition: all 0.2s ease-in-out;
 }
 
 .task-list li:hover {
   transform: scale(1.02);
   background: #f0f8ff;
 }
-
-.status {
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.status.pending { background: #f6c23e; color: #fff; }
-.status.progress { background: #36b9cc; color: #fff; }
-.status.done { background: #1cc88a; color: #fff; }
-
 
 .alert {
   padding: 12px;
@@ -150,6 +128,58 @@ button, .btn {
 .alert.error   { background: #f8d7da; color: #721c24; }
 .alert.info    { background: #cce5ff; color: #004085; }
 
+#profile-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #4e73df;
+  color: #fff;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 1000;
+}
+
+#profile-panel {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #333;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  width: 90%;
+  max-width: 400px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1001;
+}
+
+#profile-panel input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #dcdde1;
+}
+
+#profile-panel button {
+  background: #1cc88a;
+  color: #fff;
+  margin-top: 10px;
+}
+
+#profile-panel button:hover {
+  background: #17a673;
+}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-20px); }

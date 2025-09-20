@@ -2,11 +2,83 @@ const API_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:5000/api"
     : "https://TU-BACKEND-DEPLOY.vercel.app/api";
+
 const token = localStorage.getItem("token");
 
 if (!token) {
   alert("⚠️ Debes iniciar sesión primero.");
   window.location.href = "login.html";
+}
+
+let secondsElapsed = 0;
+let timerInterval;
+
+window.addEventListener("DOMContentLoaded", () => {
+  startTimer();
+  fetchProfile();
+  fetchTasks();
+
+  // Configurar botón de logout
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", logout);
+  }
+});
+
+function startTimer() {
+  const counterEl = document.getElementById("time-counter");
+  timerInterval = setInterval(() => {
+    secondsElapsed++;
+    counterEl.textContent = formatTime(secondsElapsed);
+  }, 1000);
+}
+
+function formatTime(seconds) {
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  return `${hrs > 0 ? hrs + "h " : ""}${mins > 0 ? mins + "m " : ""}${secs}s`;
+}
+
+async function fetchProfile() {
+  try {
+    const res = await fetch(`${API_URL}/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("No se pudo obtener el perfil");
+    const user = await res.json();
+    document.getElementById("profile-name").value = user.name;
+    document.getElementById("profile-email").value = user.email;
+  } catch (err) {
+    console.error(err);
+    alert("❌ Error al cargar el perfil");
+  }
+}
+
+async function updateProfile() {
+  const name = document.getElementById("profile-name").value.trim();
+  const email = document.getElementById("profile-email").value.trim();
+
+  if (!name || !email) {
+    alert("⚠️ Completa todos los campos del perfil");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_URL}/auth/me`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name, email }),
+    });
+    if (!res.ok) throw new Error("No se pudo actualizar el perfil");
+    alert("✅ Perfil actualizado con éxito");
+  } catch (err) {
+    console.error(err);
+    alert("❌ Error al actualizar el perfil");
+  }
 }
 
 async function fetchTasks() {
@@ -15,9 +87,7 @@ async function fetchTasks() {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    if (!res.ok) {
-      throw new Error("Error al obtener tareas");
-    }
+    if (!res.ok) throw new Error("Error al obtener tareas");
 
     const tasks = await res.json();
     renderTasks(tasks);
@@ -79,7 +149,7 @@ async function toggleTask(id, completed) {
 
 async function editTask(id, currentDescription, currentStart, currentEnd) {
   const newDescription = prompt("✏️ Edita la descripción:", currentDescription);
-  if (newDescription === null) return; // cancelar edición
+  if (newDescription === null) return;
 
   const newStart = prompt(
     "📅 Nueva fecha de inicio (YYYY-MM-DD):",
@@ -159,7 +229,5 @@ function updateStats(tasks) {
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-  window.location.href = "login.html";
+  window.location.href = "index.html";
 }
-
-fetchTasks();
