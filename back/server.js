@@ -10,7 +10,7 @@ const allowedOrigins = [
   "http://localhost:3000", // frontend en local
   "http://localhost:5000", // backend local
   "https://mini-gamma-murex.vercel.app", // otro frontend en Vercel (si lo usas)
-  "https://mini11.vercel.app", // 👈 tu frontend actual en Vercel
+  "https://mini.vercel.app", // 👈 tu frontend actual en Vercel
 ];
 
 app.use(
