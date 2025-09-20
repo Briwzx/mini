@@ -1,4 +1,7 @@
-const API_URL = "http://localhost:5000/api";
+const API_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000/api"
+    : "https://TU-BACKEND-DEPLOY.vercel.app/api";
 const token = localStorage.getItem("token");
 
 if (!token) {
